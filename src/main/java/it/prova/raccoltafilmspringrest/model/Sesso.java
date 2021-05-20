@@ -12,5 +12,19 @@ public enum Sesso {
 	public String getAbbreviazione() {
 		return abbreviazione;
 	}
+	
+//	@JsonCreator
+//	public static Sesso getSessoFromCode(String value) {
+//	 
+//	    for (Sesso dep : Sesso.values()) {
+//	 
+//	        if (equals(value)) {
+//	 
+//	            return dep;
+//	        }
+//	    }
+//	 
+//	    return null;
+//	}
 
 }
