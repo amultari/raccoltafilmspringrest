@@ -40,7 +40,7 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 
 		Film loSqualo = new Film("Lo Squalo", "thriller", new SimpleDateFormat("dd/MM/yyyy").parse("19/12/1975"), 130,
 				registaSpielberg);
-		if (filmService.findByTitoloAndGenere(loSqualo.getTitolo(), loSqualo.getGenere()) == null)
+		if (filmService.findByTitoloAndGenere(loSqualo.getTitolo(), loSqualo.getGenere()).isEmpty())
 			filmService.inserisciNuovo(loSqualo);
 
 		String kathryn = "Kathryn ";
@@ -55,7 +55,7 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 
 		Film pointBreak = new Film("Point Break", "thriller", new SimpleDateFormat("dd/MM/yyyy").parse("19/02/1991"),
 				122, kathrynBigelow);
-		if (filmService.findByTitoloAndGenere(pointBreak.getTitolo(), pointBreak.getGenere()) == null)
+		if (filmService.findByTitoloAndGenere(pointBreak.getTitolo(), pointBreak.getGenere()).isEmpty())
 			filmService.inserisciNuovo(pointBreak);
 
 	}

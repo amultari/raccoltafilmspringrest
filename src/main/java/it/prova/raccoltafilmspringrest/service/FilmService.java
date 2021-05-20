@@ -19,6 +19,6 @@ public interface FilmService {
 
 	List<Film> findByExample(Film example);
 
-	Film findByTitoloAndGenere(String titolo, String genere);
+	List<Film> findByTitoloAndGenere(String titolo, String genere);
 
 }

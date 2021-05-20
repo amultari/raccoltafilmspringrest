@@ -18,7 +18,7 @@ public class FilmServiceImpl implements FilmService {
 	public List<Film> listAllElements(boolean eager) {
 		if (eager)
 			return (List<Film>) repository.findAllFilmEager();
-		
+
 		return (List<Film>) repository.findAll();
 	}
 
@@ -50,7 +50,7 @@ public class FilmServiceImpl implements FilmService {
 		return this.listAllElements(false);
 	}
 
-	public Film findByTitoloAndGenere(String titolo, String genere) {
+	public List<Film> findByTitoloAndGenere(String titolo, String genere) {
 		return repository.findByTitoloAndGenere(titolo, genere);
 	}
 

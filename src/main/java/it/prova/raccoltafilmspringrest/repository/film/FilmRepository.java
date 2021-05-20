@@ -11,7 +11,7 @@ public interface FilmRepository extends CrudRepository<Film, Long> {
 	@Query("from Film f join fetch f.regista where f.id = ?1")
 	Film findSingleFilmEager(Long id);
 	
-	Film findByTitoloAndGenere(String titolo, String genere);
+	List<Film> findByTitoloAndGenere(String titolo, String genere);
 	
 	@Query("select f from Film f join fetch f.regista")
 	List<Film> findAllFilmEager();
