@@ -1,5 +1,9 @@
 package it.prova.raccoltafilmspringrest.model;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum Sesso {
 	MASCHIO("M"), FEMMINA("S");
 
@@ -12,19 +16,18 @@ public enum Sesso {
 	public String getAbbreviazione() {
 		return abbreviazione;
 	}
-	
-//	@JsonCreator
-//	public static Sesso getSessoFromCode(String value) {
-//	 
-//	    for (Sesso dep : Sesso.values()) {
-//	 
-//	        if (equals(value)) {
-//	 
-//	            return dep;
-//	        }
-//	    }
-//	 
-//	    return null;
-//	}
+
+	@JsonCreator
+	public static Sesso getSessoFromCode(String input) {
+		if(StringUtils.isBlank(input))
+			return null;
+		
+		for (Sesso sessoItem : Sesso.values()) {
+			if (sessoItem.equals(Sesso.valueOf(input))) {
+				return sessoItem;
+			}
+		}
+		return null;
+	}
 
 }
