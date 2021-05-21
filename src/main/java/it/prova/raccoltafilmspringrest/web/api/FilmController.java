@@ -37,7 +37,7 @@ public class FilmController {
 	
 	@GetMapping("/{id}")
 	public Film findById(@PathVariable(value = "id", required = true) long id) {
-		Film film = filmService.caricaSingoloElemento(id);
+		Film film = filmService.caricaSingoloElementoEager(id);
 
 		if (film == null)
 			throw new FilmNotFoundException("Film not found con id: " + id);
