@@ -30,6 +30,8 @@ public class RegistaController {
 
 	@GetMapping
 	public List<RegistaDTO> getAll() {
+		// senza DTO qui hibernate dava il problema del N + 1 SELECT
+		// (probabilmente dovuto alle librerie che serializzano in JSON)
 		return RegistaDTO.createRegistaDTOListFromModelList(registaService.listAllElementsEager(), true);
 	}
 
