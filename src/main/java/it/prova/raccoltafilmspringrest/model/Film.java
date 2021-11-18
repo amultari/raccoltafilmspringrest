@@ -50,7 +50,7 @@ public class Film {
 	@JsonIgnoreProperties(value= {"films"})
 	@NotNull(message = "{regista.notnull}")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "regista_id")
+	@JoinColumn(name = "regista_id",nullable = false)
 	private Regista regista;
 
 	public Film() {
