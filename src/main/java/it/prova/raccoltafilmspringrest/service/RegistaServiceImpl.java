@@ -25,7 +25,7 @@ public class RegistaServiceImpl implements RegistaService {
 	}
 
 	public Regista caricaSingoloElementoConFilms(Long id) {
-		return null;
+		return repository.findByIdEager(id);
 	}
 
 	@Transactional
@@ -53,6 +53,11 @@ public class RegistaServiceImpl implements RegistaService {
 
 	public Regista findByNomeAndCognome(String nome, String cognome) {
 		return repository.findByNomeAndCognome(nome, cognome);
+	}
+
+	@Override
+	public List<Regista> listAllElementsEager() {
+		return (List<Regista>)repository.findAllEager();
 	}
 
 }

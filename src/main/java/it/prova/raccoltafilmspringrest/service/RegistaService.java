@@ -7,6 +7,8 @@ import it.prova.raccoltafilmspringrest.model.Regista;
 public interface RegistaService {
 	
 	List<Regista> listAllElements();
+	
+	List<Regista> listAllElementsEager();
 
 	Regista caricaSingoloElemento(Long id);
 	
