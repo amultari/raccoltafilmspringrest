@@ -52,5 +52,5 @@ public class FilmController {
 
 		return FilmDTO.buildFilmDTOFromModel(film, true);
 	}
-
+	
 }

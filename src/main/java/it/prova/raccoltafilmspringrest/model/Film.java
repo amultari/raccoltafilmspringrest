@@ -40,26 +40,28 @@ public class Film {
 	public Film() {
 	}
 
-	public Film(Long id, String titolo, String genere, Date dataPubblicazione, Integer minutiDurata, Regista regista) {
-		this.id = id;
+	public Film(String titolo, String genere) {
 		this.titolo = titolo;
 		this.genere = genere;
+	}
+
+	public Film(Long id, String titolo, String genere, Date dataPubblicazione, Integer minutiDurata) {
+		this(titolo, genere);
+		this.id = id;
 		this.dataPubblicazione = dataPubblicazione;
 		this.minutiDurata = minutiDurata;
+	}
+
+	public Film(Long id, String titolo, String genere, Date dataPubblicazione, Integer minutiDurata, Regista regista) {
+		this(id, titolo, genere, dataPubblicazione, minutiDurata);
 		this.regista = regista;
 	}
 
 	public Film(String titolo, String genere, Date dataPubblicazione, Integer minutiDurata, Regista regista) {
-		this.titolo = titolo;
-		this.genere = genere;
+		this(titolo, genere);
 		this.dataPubblicazione = dataPubblicazione;
 		this.minutiDurata = minutiDurata;
 		this.regista = regista;
-	}
-
-	public Film(String titolo, String genere) {
-		this.titolo = titolo;
-		this.genere = genere;
 	}
 
 	public Long getId() {

@@ -113,8 +113,11 @@ public class FilmDTO {
 	}
 
 	public Film buildFilmModel() {
-		return new Film(this.id, this.titolo, this.genere, this.dataPubblicazione, this.minutiDurata,
-				this.regista.buildRegistaModel());
+		Film result = new Film(this.id, this.titolo, this.genere, this.dataPubblicazione, this.minutiDurata);
+		if (this.regista != null)
+			result.setRegista(this.regista.buildRegistaModel());
+
+		return result;
 	}
 
 	public static FilmDTO buildFilmDTOFromModel(Film filmModel, boolean includeRegisti) {
