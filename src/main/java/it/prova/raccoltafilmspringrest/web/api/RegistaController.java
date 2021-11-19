@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.prova.raccoltafilmspringrest.dto.RegistaDTO;
 import it.prova.raccoltafilmspringrest.model.Regista;
 import it.prova.raccoltafilmspringrest.service.RegistaService;
+import it.prova.raccoltafilmspringrest.web.api.exception.IdNotNullForInsertException;
 import it.prova.raccoltafilmspringrest.web.api.exception.RegistaNotFoundException;
 
 @RestController
@@ -50,6 +51,10 @@ public class RegistaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RegistaDTO createNew(@Valid @RequestBody RegistaDTO registaInput) {
+		//se mi viene inviato un id jpa lo interpreta come update ed a me (producer) non sta bene
+		if(registaInput.getId() != null)
+			throw new IdNotNullForInsertException("Non è ammesso fornire un id per la creazione");
+		
 		Regista registaInserito = registaService.inserisciNuovo(registaInput.buildRegistaModel());
 		return RegistaDTO.buildRegistaDTOFromModel(registaInserito, false);
 	}
