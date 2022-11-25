@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum Sesso {
-	MASCHIO("M"), FEMMINA("S");
+	MASCHIO("M"), FEMMINA("F");
 
 	private String abbreviazione;
 
