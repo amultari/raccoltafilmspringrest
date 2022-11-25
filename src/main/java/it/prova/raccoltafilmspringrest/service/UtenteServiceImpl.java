@@ -13,6 +13,7 @@ import it.prova.raccoltafilmspringrest.model.Utente;
 import it.prova.raccoltafilmspringrest.repository.utente.UtenteRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class UtenteServiceImpl implements UtenteService {
 
 	@Autowired
@@ -21,17 +22,14 @@ public class UtenteServiceImpl implements UtenteService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Transactional(readOnly = true)
 	public List<Utente> listAllUtenti() {
 		return (List<Utente>) repository.findAll();
 	}
 
-	@Transactional(readOnly = true)
 	public Utente caricaSingoloUtente(Long id) {
 		return repository.findById(id).orElse(null);
 	}
 
-	@Transactional(readOnly = true)
 	public Utente caricaSingoloUtenteConRuoli(Long id) {
 		return repository.findByIdConRuoli(id).orElse(null);
 	}
@@ -59,21 +57,19 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Transactional
 	public void rimuovi(Long idToRemove) {
-		repository.deleteById(idToRemove);;
+		repository.deleteById(idToRemove);
+		;
 	}
 
-	@Transactional(readOnly = true)
 	public List<Utente> findByExample(Utente example) {
 		// TODO Da implementare
 		return listAllUtenti();
 	}
 
-	@Transactional(readOnly = true)
 	public Utente eseguiAccesso(String username, String password) {
 		return repository.findByUsernameAndPasswordAndStato(username, password, StatoUtente.ATTIVO);
 	}
 
-	@Override
 	public Utente findByUsernameAndPassword(String username, String password) {
 		return repository.findByUsernameAndPassword(username, password);
 	}
@@ -92,7 +88,6 @@ public class UtenteServiceImpl implements UtenteService {
 			utenteInstance.setStato(StatoUtente.ATTIVO);
 	}
 
-	@Transactional
 	public Utente findByUsername(String username) {
 		return repository.findByUsername(username).orElse(null);
 	}

@@ -11,6 +11,7 @@ import it.prova.raccoltafilmspringrest.repository.film.FilmRepository;
 import it.prova.raccoltafilmspringrest.web.api.exception.FilmNotFoundException;
 
 @Service
+@Transactional(readOnly = true)
 public class FilmServiceImpl implements FilmService {
 
 	@Autowired
