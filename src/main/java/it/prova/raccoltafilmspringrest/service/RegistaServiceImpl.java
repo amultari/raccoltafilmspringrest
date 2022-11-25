@@ -11,6 +11,7 @@ import it.prova.raccoltafilmspringrest.repository.regista.RegistaRepository;
 import it.prova.raccoltafilmspringrest.web.api.exception.RegistaNotFoundException;
 
 @Service
+@Transactional(readOnly = true)
 public class RegistaServiceImpl implements RegistaService {
 
 	@Autowired
