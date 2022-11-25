@@ -13,7 +13,7 @@ public interface RuoloService {
 
 	public void inserisciNuovo(Ruolo ruoloInstance);
 
-	public void rimuovi(Ruolo ruoloInstance);
+	public void rimuovi(Long idToRemove);
 
 	public Ruolo cercaPerDescrizioneECodice(String descrizione, String codice);
 
