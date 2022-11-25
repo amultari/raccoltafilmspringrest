@@ -15,7 +15,7 @@ public interface FilmService {
 
 	Film inserisciNuovo(Film filmInstance);
 
-	void rimuovi(Film filmInstance);
+	void rimuovi(Long idToRemove);
 
 	List<Film> findByExample(Film example);
 

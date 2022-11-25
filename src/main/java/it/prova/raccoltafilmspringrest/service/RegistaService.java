@@ -18,7 +18,7 @@ public interface RegistaService {
 
 	Regista inserisciNuovo(Regista registaInstance);
 
-	void rimuovi(Regista registaInstance);
+	void rimuovi(Long idToRemove);
 	
 	List<Regista> findByExample(Regista example);
 	

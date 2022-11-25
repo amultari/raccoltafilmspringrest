@@ -51,10 +51,11 @@ public class RegistaController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RegistaDTO createNew(@Valid @RequestBody RegistaDTO registaInput) {
-		//se mi viene inviato un id jpa lo interpreta come update ed a me (producer) non sta bene
-		if(registaInput.getId() != null)
+		// se mi viene inviato un id jpa lo interpreta come update ed a me (producer)
+		// non sta bene
+		if (registaInput.getId() != null)
 			throw new IdNotNullForInsertException("Non è ammesso fornire un id per la creazione");
-		
+
 		Regista registaInserito = registaService.inserisciNuovo(registaInput.buildRegistaModel());
 		return RegistaDTO.buildRegistaDTOFromModel(registaInserito, false);
 	}
@@ -72,14 +73,9 @@ public class RegistaController {
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable(required = true) Long id) {
-		Regista regista = registaService.caricaSingoloElemento(id);
-
-		if (regista == null)
-			throw new RegistaNotFoundException("Regista not found con id: " + id);
-
-		registaService.rimuovi(regista);
+		registaService.rimuovi(id);
 	}
 
 	@PostMapping("/search")

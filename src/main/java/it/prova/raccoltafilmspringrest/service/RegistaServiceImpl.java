@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.raccoltafilmspringrest.model.Regista;
 import it.prova.raccoltafilmspringrest.repository.regista.RegistaRepository;
+import it.prova.raccoltafilmspringrest.web.api.exception.RegistaNotFoundException;
 
 @Service
 public class RegistaServiceImpl implements RegistaService {
@@ -15,9 +16,8 @@ public class RegistaServiceImpl implements RegistaService {
 	@Autowired
 	private RegistaRepository repository;
 
-
 	public List<Regista> listAllElements() {
-		return (List<Regista>)repository.findAll();
+		return (List<Regista>) repository.findAll();
 	}
 
 	public Regista caricaSingoloElemento(Long id) {
@@ -39,8 +39,10 @@ public class RegistaServiceImpl implements RegistaService {
 	}
 
 	@Transactional
-	public void rimuovi(Regista registaInstance) {
-		repository.delete(registaInstance);
+	public void rimuovi(Long idToRemove) {
+		repository.findById(idToRemove)
+				.orElseThrow(() -> new RegistaNotFoundException("Regista not found con id: " + idToRemove));
+		repository.deleteById(idToRemove);
 	}
 
 	public List<Regista> findByExample(Regista example) {
@@ -57,7 +59,7 @@ public class RegistaServiceImpl implements RegistaService {
 
 	@Override
 	public List<Regista> listAllElementsEager() {
-		return (List<Regista>)repository.findAllEager();
+		return (List<Regista>) repository.findAllEager();
 	}
 
 }

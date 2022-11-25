@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.raccoltafilmspringrest.model.Film;
 import it.prova.raccoltafilmspringrest.repository.film.FilmRepository;
+import it.prova.raccoltafilmspringrest.web.api.exception.FilmNotFoundException;
 
 @Service
 public class FilmServiceImpl implements FilmService {
@@ -41,8 +42,10 @@ public class FilmServiceImpl implements FilmService {
 	}
 
 	@Transactional
-	public void rimuovi(Film filmInstance) {
-		repository.delete(filmInstance);
+	public void rimuovi(Long idToRemove) {
+		repository.findById(idToRemove)
+				.orElseThrow(() -> new FilmNotFoundException("Film not found con id: " + idToRemove));
+		repository.deleteById(idToRemove);
 	}
 
 	public List<Film> findByExample(Film example) {
