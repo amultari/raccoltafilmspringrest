@@ -1,7 +1,6 @@
 package it.prova.raccoltafilmspringrest;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -50,7 +49,7 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		// password non lo
 		// faccio qui perche gia lo fa il service di utente, durante inserisciNuovo
 		if (utenteServiceInstance.findByUsername("admin") == null) {
-			Utente admin = new Utente("admin", "admin", "Mario", "Rossi", new Date());
+			Utente admin = new Utente("admin", "admin", "Mario", "Rossi", LocalDate.now());
 			admin.setEmail("a.admin@prova.it");
 			admin.getRuoli().add(ruoloServiceInstance.cercaPerDescrizioneECodice("Administrator", Ruolo.ROLE_ADMIN));
 			utenteServiceInstance.inserisciNuovo(admin);
@@ -59,7 +58,7 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		}
 
 		if (utenteServiceInstance.findByUsername("user") == null) {
-			Utente classicUser = new Utente("user", "user", "Antonio", "Verdi", new Date());
+			Utente classicUser = new Utente("user", "user", "Antonio", "Verdi", LocalDate.now());
 			classicUser.setEmail("u.user@prova.it");
 			classicUser.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Classic User", Ruolo.ROLE_CLASSIC_USER));
@@ -69,7 +68,7 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		}
 
 		if (utenteServiceInstance.findByUsername("user1") == null) {
-			Utente classicUser1 = new Utente("user1", "user1", "Antonioo", "Verdii", new Date());
+			Utente classicUser1 = new Utente("user1", "user1", "Antonioo", "Verdii", LocalDate.now());
 			classicUser1.setEmail("u.user1@prova.it");
 			classicUser1.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Classic User", Ruolo.ROLE_CLASSIC_USER));
@@ -79,7 +78,7 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		}
 
 		if (utenteServiceInstance.findByUsername("user2") == null) {
-			Utente classicUser2 = new Utente("user2", "user2", "Antoniooo", "Verdiii", new Date());
+			Utente classicUser2 = new Utente("user2", "user2", "Antoniooo", "Verdiii", LocalDate.now());
 			classicUser2.setEmail("u.user2@prova.it");
 			classicUser2.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Classic User", Ruolo.ROLE_CLASSIC_USER));
@@ -93,13 +92,11 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		Regista registaSpielberg = registaService.findByNomeAndCognome(steven, spielberg);
 
 		if (registaSpielberg == null) {
-			registaSpielberg = new Regista(steven, spielberg, "stevsp",
-					new SimpleDateFormat("dd/MM/yyyy").parse("18/12/1946"), Sesso.MASCHIO);
+			registaSpielberg = new Regista(steven, spielberg, "stevsp", LocalDate.of(1946, 12, 18), Sesso.MASCHIO);
 			registaService.inserisciNuovo(registaSpielberg);
 		}
 
-		Film loSqualo = new Film("Lo Squalo", "thriller", new SimpleDateFormat("dd/MM/yyyy").parse("19/12/1975"), 130,
-				registaSpielberg);
+		Film loSqualo = new Film("Lo Squalo", "thriller", LocalDate.of(1975, 12, 19), 130, registaSpielberg);
 		if (filmService.findByTitoloAndGenere(loSqualo.getTitolo(), loSqualo.getGenere()).isEmpty())
 			filmService.inserisciNuovo(loSqualo);
 
@@ -108,13 +105,11 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		Regista kathrynBigelow = registaService.findByNomeAndCognome(kathryn, bigelow);
 
 		if (kathrynBigelow == null) {
-			kathrynBigelow = new Regista(kathryn, bigelow, "katbig",
-					new SimpleDateFormat("dd/MM/yyyy").parse("27/11/1951"), Sesso.FEMMINA);
+			kathrynBigelow = new Regista(kathryn, bigelow, "katbig", LocalDate.of(1951, 11, 27), Sesso.FEMMINA);
 			registaService.inserisciNuovo(kathrynBigelow);
 		}
 
-		Film pointBreak = new Film("Point Break", "thriller", new SimpleDateFormat("dd/MM/yyyy").parse("19/02/1991"),
-				122, kathrynBigelow);
+		Film pointBreak = new Film("Point Break", "thriller", LocalDate.of(1991, 2, 19), 122, kathrynBigelow);
 		if (filmService.findByTitoloAndGenere(pointBreak.getTitolo(), pointBreak.getGenere()).isEmpty())
 			filmService.inserisciNuovo(pointBreak);
 

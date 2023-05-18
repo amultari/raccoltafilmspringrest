@@ -1,6 +1,6 @@
 package it.prova.raccoltafilmspringrest.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +35,7 @@ public class Utente {
 	@Column(name = "email")
 	private String email;
 	@Column(name = "dateCreated")
-	private Date dateCreated;
+	private LocalDate dateCreated;
 
 	// se non uso questa annotation viene gestito come un intero
 	@Enumerated(EnumType.STRING)
@@ -54,7 +54,7 @@ public class Utente {
 		this.password = password;
 	}
 
-	public Utente(String username, String password, String nome, String cognome, Date dateCreated) {
+	public Utente(String username, String password, String nome, String cognome, LocalDate dateCreated) {
 		this(username, password);
 		this.nome = nome;
 		this.cognome = cognome;
@@ -62,7 +62,7 @@ public class Utente {
 	}
 
 	public Utente(Long id, String username, String password, String nome, String cognome, String email,
-			Date dateCreated, StatoUtente stato) {
+			LocalDate dateCreated, StatoUtente stato) {
 		this(username, password, nome, cognome, dateCreated);
 		this.id = id;
 		this.email = email;
@@ -117,11 +117,11 @@ public class Utente {
 		this.cognome = cognome;
 	}
 
-	public Date getDateCreated() {
+	public LocalDate getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(LocalDate dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 

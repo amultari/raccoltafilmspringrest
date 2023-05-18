@@ -1,7 +1,7 @@
 package it.prova.raccoltafilmspringrest.dto;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
@@ -34,7 +34,7 @@ public class UtenteDTO {
 	@NotBlank(message = "{email.notblank}")
 	private String email;
 
-	private Date dateCreated;
+	private LocalDate dateCreated;
 
 	private StatoUtente stato;
 
@@ -92,11 +92,11 @@ public class UtenteDTO {
 		this.cognome = cognome;
 	}
 
-	public Date getDateCreated() {
+	public LocalDate getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(LocalDate dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
