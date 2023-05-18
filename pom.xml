@@ -10,7 +10,7 @@
 	<groupId>it.prova</groupId>
 	<artifactId>raccoltafilmspringrest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>raccoltafilmspringrest</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
