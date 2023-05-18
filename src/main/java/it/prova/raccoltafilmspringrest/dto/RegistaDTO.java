@@ -1,6 +1,6 @@
 package it.prova.raccoltafilmspringrest.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +32,7 @@ public class RegistaDTO {
 	private String nickName;
 
 	@NotNull(message = "{dataDiNascita.notnull}")
-	private Date dataDiNascita;
+	private LocalDate dataDiNascita;
 
 	@NotNull(message = "{sesso.notblank}")
 	private Sesso sesso;
@@ -47,7 +47,7 @@ public class RegistaDTO {
 		this.id = id;
 	}
 
-	public RegistaDTO(Long id, String nome, String cognome, String nickName, Date dataDiNascita, Sesso sesso) {
+	public RegistaDTO(Long id, String nome, String cognome, String nickName, LocalDate dataDiNascita, Sesso sesso) {
 		this.id = id;
 		this.nome = nome;
 		this.cognome = cognome;
@@ -94,11 +94,11 @@ public class RegistaDTO {
 		this.nickName = nickName;
 	}
 
-	public Date getDataDiNascita() {
+	public LocalDate getDataDiNascita() {
 		return dataDiNascita;
 	}
 
-	public void setDataDiNascita(Date dataDiNascita) {
+	public void setDataDiNascita(LocalDate dataDiNascita) {
 		this.dataDiNascita = dataDiNascita;
 	}
 
@@ -125,15 +125,16 @@ public class RegistaDTO {
 	public static RegistaDTO buildRegistaDTOFromModel(Regista registaModel, boolean includeFilms) {
 		RegistaDTO result = new RegistaDTO(registaModel.getId(), registaModel.getNome(), registaModel.getCognome(),
 				registaModel.getNickName(), registaModel.getDataDiNascita(), registaModel.getSesso());
-		if(includeFilms)
+		if (includeFilms)
 			result.setFilms(FilmDTO.createFilmDTOSetFromModelSet(registaModel.getFilms(), false));
 		return result;
 	}
 
-	public static List<RegistaDTO> createRegistaDTOListFromModelList(List<Regista> modelListInput, boolean includeFilms) {
+	public static List<RegistaDTO> createRegistaDTOListFromModelList(List<Regista> modelListInput,
+			boolean includeFilms) {
 		return modelListInput.stream().map(registaEntity -> {
-			RegistaDTO result = RegistaDTO.buildRegistaDTOFromModel(registaEntity,includeFilms);
-			if(includeFilms)
+			RegistaDTO result = RegistaDTO.buildRegistaDTOFromModel(registaEntity, includeFilms);
+			if (includeFilms)
 				result.setFilms(FilmDTO.createFilmDTOSetFromModelSet(registaEntity.getFilms(), false));
 			return result;
 		}).collect(Collectors.toList());

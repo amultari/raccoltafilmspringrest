@@ -1,6 +1,6 @@
 package it.prova.raccoltafilmspringrest;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -33,13 +33,11 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		Regista registaSpielberg = registaService.findByNomeAndCognome(steven, spielberg);
 
 		if (registaSpielberg == null) {
-			registaSpielberg = new Regista(steven, spielberg, "stevsp",
-					new SimpleDateFormat("dd/MM/yyyy").parse("18/12/1946"), Sesso.MASCHIO);
+			registaSpielberg = new Regista(steven, spielberg, "stevsp", LocalDate.of(1946, 12, 18), Sesso.MASCHIO);
 			registaService.inserisciNuovo(registaSpielberg);
 		}
 
-		Film loSqualo = new Film("Lo Squalo", "thriller", new SimpleDateFormat("dd/MM/yyyy").parse("19/12/1975"), 130,
-				registaSpielberg);
+		Film loSqualo = new Film("Lo Squalo", "thriller", LocalDate.of(1975, 12, 19), 130, registaSpielberg);
 		if (filmService.findByTitoloAndGenere(loSqualo.getTitolo(), loSqualo.getGenere()).isEmpty())
 			filmService.inserisciNuovo(loSqualo);
 
@@ -48,13 +46,11 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		Regista kathrynBigelow = registaService.findByNomeAndCognome(kathryn, bigelow);
 
 		if (kathrynBigelow == null) {
-			kathrynBigelow = new Regista(kathryn, bigelow, "katbig",
-					new SimpleDateFormat("dd/MM/yyyy").parse("27/11/1951"), Sesso.FEMMINA);
+			kathrynBigelow = new Regista(kathryn, bigelow, "katbig", LocalDate.of(1951, 11, 27), Sesso.FEMMINA);
 			registaService.inserisciNuovo(kathrynBigelow);
 		}
 
-		Film pointBreak = new Film("Point Break", "thriller", new SimpleDateFormat("dd/MM/yyyy").parse("19/02/1991"),
-				122, kathrynBigelow);
+		Film pointBreak = new Film("Point Break", "thriller", LocalDate.of(1991, 2, 19), 122, kathrynBigelow);
 		if (filmService.findByTitoloAndGenere(pointBreak.getTitolo(), pointBreak.getGenere()).isEmpty())
 			filmService.inserisciNuovo(pointBreak);
 
