@@ -2,12 +2,14 @@ package it.prova.raccoltafilmspringrest.repository.regista;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import it.prova.raccoltafilmspringrest.model.Regista;
 
-public interface RegistaRepository extends CrudRepository<Regista, Long>, CustomRegistaRepository {
+public interface RegistaRepository
+		extends PagingAndSortingRepository<Regista, Long>, JpaSpecificationExecutor<Regista>, CustomRegistaRepository {
 	Regista findByNomeAndCognome(String nome, String cognome);
 
 	List<Regista> findByCognomeIgnoreCaseContainingOrNomeIgnoreCaseContainingOrderByNomeAsc(String cognome,
