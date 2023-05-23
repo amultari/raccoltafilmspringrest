@@ -58,7 +58,7 @@ public class RegistaServiceImpl implements RegistaService {
 	public List<Regista> findByExample(Regista example) {
 		return repository.findByExample(example);
 	}
-	
+
 	@Override
 	public Page<Regista> findByExampleWithPagination(Regista example, Integer pageNo, Integer pageSize, String sortBy) {
 		Specification<Regista> specificationCriteria = (root, query, cb) -> {
@@ -92,6 +92,14 @@ public class RegistaServiceImpl implements RegistaService {
 			paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
 		return repository.findAll(specificationCriteria, paging);
+	}
+
+	@Override
+	public Page<Regista> findByExampleNativeWithPagination(Regista example, Integer pageNo, Integer pageSize,
+			String sortBy) {
+		return repository.findByExampleNativeWithPagination(example.getNome(), example.getCognome(),
+				example.getDataDiNascita(), example.getSesso(), example.getNickName(),
+				PageRequest.of(pageNo, pageSize, Sort.by(sortBy)));
 	}
 
 	public List<Regista> cercaByCognomeENomeILike(String term) {

@@ -26,6 +26,8 @@ public interface RegistaService {
 
 	Page<Regista> findByExampleWithPagination(Regista example, Integer pageNo, Integer pageSize, String sortBy);
 
+	Page<Regista> findByExampleNativeWithPagination(Regista example, Integer pageNo, Integer pageSize, String sortBy);
+
 	List<Regista> cercaByCognomeENomeILike(String term);
 
 	Regista findByNomeAndCognome(String nome, String cognome);
