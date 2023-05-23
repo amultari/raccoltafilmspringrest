@@ -1,6 +1,7 @@
 package it.prova.raccoltafilmspringrest;
 
 import java.time.LocalDate;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -112,6 +113,18 @@ public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 		Film pointBreak = new Film("Point Break", "thriller", LocalDate.of(1991, 2, 19), 122, kathrynBigelow);
 		if (filmService.findByTitoloAndGenere(pointBreak.getTitolo(), pointBreak.getGenere()).isEmpty())
 			filmService.inserisciNuovo(pointBreak);
+
+		// ora inserisco un qualche dato di prova giusto per provare con ulteriori dati
+		String nomeBulk = "Antonia";
+		String cognomeBulk = "Carosto";
+		// se ho già inserito queesti dati una volta, non lo faccio una seconda
+		if (registaService.findByNomeAndCognome(nomeBulk + 1, cognomeBulk + 1) == null) {
+			IntStream.rangeClosed(1, 15).forEach(i -> {
+				Regista registaInstance = new Regista(nomeBulk + i, cognomeBulk + i, "antocar" + i,
+						LocalDate.of(1960 + i, 12, 10 + i), Sesso.FEMMINA);
+				registaService.inserisciNuovo(registaInstance);
+			});
+		}
 
 	}
 

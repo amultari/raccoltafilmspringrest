@@ -10,6 +10,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -138,6 +142,13 @@ public class RegistaDTO {
 				result.setFilms(FilmDTO.createFilmDTOSetFromModelSet(registaEntity.getFilms(), false));
 			return result;
 		}).collect(Collectors.toList());
+	}
+
+	public static Page<RegistaDTO> fromModelPageToDTOPage(Page<Regista> input) {
+		return new PageImpl<>(createRegistaDTOListFromModelList(input.getContent(), false),
+				PageRequest.of(input.getPageable().getPageNumber(), input.getPageable().getPageSize(),
+						input.getPageable().getSort()),
+				input.getTotalElements());
 	}
 
 }
