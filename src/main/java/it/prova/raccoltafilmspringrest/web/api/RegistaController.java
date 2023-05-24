@@ -89,7 +89,7 @@ public class RegistaController {
 
 	@PostMapping("/searchWithPagination")
 	public ResponseEntity<Page<RegistaDTO>> searchPaginated(@RequestBody RegistaDTO example,
-			@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "0") Integer pageSize,
+			@RequestParam(required = true) Integer pageNo, @RequestParam(required = true) Integer pageSize,
 			@RequestParam(defaultValue = "id") String sortBy) {
 
 		Page<Regista> entityPageResults = registaService.findByExampleWithPagination(example.buildRegistaModel(),
@@ -98,10 +98,10 @@ public class RegistaController {
 		return new ResponseEntity<Page<RegistaDTO>>(RegistaDTO.fromModelPageToDTOPage(entityPageResults),
 				HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/searchNativeWithPagination")
 	public ResponseEntity<Page<RegistaDTO>> searchNativePaginated(@RequestBody RegistaDTO example,
-			@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "0") Integer pageSize,
+			@RequestParam(required = true) Integer pageNo, @RequestParam(required = true) Integer pageSize,
 			@RequestParam(defaultValue = "id") String sortBy) {
 
 		Page<Regista> entityPageResults = registaService.findByExampleNativeWithPagination(example.buildRegistaModel(),
