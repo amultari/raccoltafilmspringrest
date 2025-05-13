@@ -1,16 +1,19 @@
 package it.prova.raccoltafilmspringrest.security;
 
-import java.util.Date;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class JWTUtil {
@@ -21,26 +24,54 @@ public class JWTUtil {
 	@Value("${jwt.expiration}")
 	private Long jwtExpirationMs;
 
-	// Method to sign and create a JWT using the injected secret
-	public String generateToken(String username) throws IllegalArgumentException, JWTCreationException {
-		return JWT.create()
-				.withSubject("User Details")
-				.withClaim("username", username)
-				.withIssuedAt(new Date())
-				.withIssuer("RACCOLTAFILMSPRINGREST")
-				.withExpiresAt(new Date((new Date()).getTime() + jwtExpirationMs))
-				.sign(Algorithm.HMAC256(secret));
+	public String generateToken(String username) {
+		Map<String, Object> claims = new HashMap<>();
+		return createToken(claims, username);
 	}
 
-	// Method to verify the JWT and then decode and extract the username stored in
-	// the payload of the token
-	public String validateTokenAndRetrieveSubject(String token) throws JWTVerificationException {
-		JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
-				.withSubject("User Details")
-				.withIssuer("RACCOLTAFILMSPRINGREST")
-				.build();
-		DecodedJWT jwt = verifier.verify(token);
-		return jwt.getClaim("username").asString();
+	private String createToken(Map<String, Object> claims, String username) {
+		return Jwts.builder()
+				.setClaims(claims)
+				.setSubject(username)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(System.currentTimeMillis() + this.jwtExpirationMs))
+				.signWith(getSignKey(), SignatureAlgorithm.HS256)
+				.compact();
+	}
+
+	private Key getSignKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(this.secret);
+		return Keys.hmacShaKeyFor(keyBytes);
+	}
+
+	public String extractUsername(String token) {
+		return extractClaim(token, Claims::getSubject);
+	}
+
+	public Date extractExpiration(String token) {
+		return extractClaim(token, Claims::getExpiration);
+	}
+
+	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+		final Claims claims = extractAllClaims(token);
+		return claimsResolver.apply(claims);
+	}
+
+	private Claims extractAllClaims(String token) {
+		return Jwts.parserBuilder()
+				.setSigningKey(getSignKey())
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+	}
+
+	private Boolean isTokenExpired(String token) {
+		return extractExpiration(token).before(new Date());
+	}
+
+	public Boolean validateToken(String token, UserDetails userDetails) {
+		final String username = extractUsername(token);
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 
 }

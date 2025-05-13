@@ -2,7 +2,7 @@ package it.prova.raccoltafilmspringrest.security;
 
 import java.util.Collection;
 
-import javax.transaction.Transactional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,15 +14,16 @@ import org.springframework.stereotype.Service;
 
 import it.prova.raccoltafilmspringrest.model.Utente;
 import it.prova.raccoltafilmspringrest.repository.utente.UtenteRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UtenteRepository utenteRepository;
 
 	@Override
-	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Utente user = utenteRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found"));

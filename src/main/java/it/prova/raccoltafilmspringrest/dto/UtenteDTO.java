@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import it.prova.raccoltafilmspringrest.model.Ruolo;
 import it.prova.raccoltafilmspringrest.model.StatoUtente;

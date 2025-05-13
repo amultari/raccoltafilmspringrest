@@ -1,68 +1,96 @@
 package it.prova.raccoltafilmspringrest.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity 
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig  {
 
-	@Autowired
-	private JWTFilter jwtFilter;
-	@Autowired
-	private CustomUserDetailsService customUserDetailsService;
+	final private JWTFilter jwtFilter;
+	final private CustomUserDetailsService customUserDetailsService;
+	final private JWTAuthEntryPoint unauthorizedHandler;
 
-	@Autowired
-	private JWTAuthEntryPoint unauthorizedHandler;
+    public SecurityConfig(JWTFilter jwtFilter, CustomUserDetailsService customUserDetailsService, JWTAuthEntryPoint unauthorizedHandler) {
+        this.jwtFilter = jwtFilter;
+        this.customUserDetailsService = customUserDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
-	@Bean
+    @Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http
+				// Disable CSRF (not needed for stateless JWT)
+				.csrf(csrf -> csrf.disable())
+
+				// Configure endpoint authorization
+				.authorizeHttpRequests(auth -> auth
+						// Public endpoints
+						.requestMatchers("/api/auth/login").permitAll()
+
+						// Role-based endpoints
+						.requestMatchers("/api/utente/userInfo").authenticated()
+						.requestMatchers("/api/utente/**").hasRole("ADMIN")
+						.requestMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER")
+
+						// All other endpoints require authentication
+						.anyRequest().authenticated()
+				)
+
+				// non abbiamo bisogno di una sessione: meglio forzare a stateless
+				// Stateless session (required for JWT)
+				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+				// Set custom authentication provider
+				.authenticationProvider(authenticationProvider())
+
+				// quando qualcosa fallisce ho il mio handler che customizza la response
+				.exceptionHandling(configurer -> configurer
+						.authenticationEntryPoint(unauthorizedHandler)
+				)
+
+				// Adding the JWT filter
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+		return http.build();
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception { 
-		http.csrf().disable() // Disabling csrf
-				.httpBasic().disable() // Disabling http basic
-				.cors() // Enabling cors
-				.and()
-				
-				.authorizeHttpRequests() 
-				.antMatchers("/api/auth/login").permitAll()
-				//tutti gli utenti autenticati possono richiedere le info
-				.antMatchers("/api/utente/userInfo").authenticated()
-				.antMatchers("/api/utente/**").hasRole("ADMIN")
-				.antMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER")
-				// .antMatchers("/anonymous*").anonymous()
-				.anyRequest().authenticated()
-				.and()
-				
-				// imposto il mio custom user details service
-				.userDetailsService(customUserDetailsService) 
-				// quando qualcosa fallisce ho il mio handler che customizza la response
-				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-				.and()
-				
-				// non abbiamo bisogno di una sessione: meglio forzare a stateless
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); 
+	/*
+	 * Authentication provider configuration
+	 * Links UserDetailsService and PasswordEncoder
+	 */
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(this.customUserDetailsService);
+		provider.setPasswordEncoder(passwordEncoder());
+		return provider;
+	}
 
-		// Adding the JWT filter
-		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+	/*
+	 * Authentication manager bean
+	 * Required for programmatic authentication (e.g., in /generateToken)
+	 */
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
 	}
 
 }

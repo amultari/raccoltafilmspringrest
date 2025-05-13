@@ -21,16 +21,19 @@ import it.prova.raccoltafilmspringrest.service.UtenteService;
 @SpringBootApplication
 public class RaccoltafilmspringrestApplication implements CommandLineRunner {
 
-	@Autowired
-	private RuoloService ruoloServiceInstance;
-	@Autowired
-	private UtenteService utenteServiceInstance;
-	@Autowired
-	private RegistaService registaService;
-	@Autowired
-	private FilmService filmService;
+	final private RuoloService ruoloServiceInstance;
+	final private UtenteService utenteServiceInstance;
+	final private RegistaService registaService;
+	final private FilmService filmService;
 
-	public static void main(String[] args) {
+    public RaccoltafilmspringrestApplication(RuoloService ruoloServiceInstance, UtenteService utenteServiceInstance, RegistaService registaService, FilmService filmService) {
+        this.ruoloServiceInstance = ruoloServiceInstance;
+        this.utenteServiceInstance = utenteServiceInstance;
+        this.registaService = registaService;
+        this.filmService = filmService;
+    }
+
+    public static void main(String[] args) {
 		SpringApplication.run(RaccoltafilmspringrestApplication.class, args);
 	}
 
