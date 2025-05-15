@@ -4,7 +4,6 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +28,11 @@ import it.prova.raccoltafilmspringrest.web.api.exception.RegistaNotFoundExceptio
 @RequestMapping("api/regista")
 public class RegistaController {
 
-	@Autowired
-	private RegistaService registaService;
+	private final RegistaService registaService;
+
+	public RegistaController(RegistaService registaService) {
+		this.registaService = registaService;
+	}
 
 	@GetMapping
 	public List<RegistaDTO> getAll() {

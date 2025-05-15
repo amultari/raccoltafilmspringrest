@@ -4,7 +4,6 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +21,11 @@ import it.prova.raccoltafilmspringrest.web.api.exception.IdNotNullForInsertExcep
 @RequestMapping("api/film")
 public class FilmController {
 
-	@Autowired
-	private FilmService filmService;
+	private final FilmService filmService;
+
+	public FilmController(FilmService filmService) {
+		this.filmService = filmService;
+	}
 
 	@GetMapping
 	public List<FilmDTO> getAll() {

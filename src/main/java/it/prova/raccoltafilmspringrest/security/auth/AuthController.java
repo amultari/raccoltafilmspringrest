@@ -3,7 +3,6 @@ package it.prova.raccoltafilmspringrest.security.auth;
 import java.util.Collections;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -19,10 +18,13 @@ import it.prova.raccoltafilmspringrest.security.dto.UtenteAuthDTO;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-	@Autowired
-	private JWTUtil jwtUtil;
-	@Autowired
-	private AuthenticationManager authManager;
+	private final JWTUtil jwtUtil;
+	private final AuthenticationManager authManager;
+
+	public AuthController(JWTUtil jwtUtil, AuthenticationManager authManager) {
+		this.jwtUtil = jwtUtil;
+		this.authManager = authManager;
+	}
 
 	@PostMapping("/login")
 	public Map<String, Object> loginHandler(@RequestBody UtenteAuthDTO body) {

@@ -3,7 +3,6 @@ package it.prova.raccoltafilmspringrest.web.api;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,11 @@ import it.prova.raccoltafilmspringrest.service.UtenteService;
 @RequestMapping("/api/utente")
 public class UtenteController {
 
-	@Autowired
-	private UtenteService utenteService;
+	private final UtenteService utenteService;
+
+	public UtenteController(UtenteService utenteService) {
+		this.utenteService = utenteService;
+	}
 
 	// questa mi serve solo per capire se solo ADMIN vi ha accesso
 	@GetMapping("/testSoloAdmin")
