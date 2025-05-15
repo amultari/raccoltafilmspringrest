@@ -21,11 +21,13 @@ public class SecurityConfig  {
 	final private JWTFilter jwtFilter;
 	final private CustomUserDetailsService customUserDetailsService;
 	final private JWTAuthEntryPoint unauthorizedHandler;
+	final private CustomAccessDeniedHandler accessDeniedHandler;
 
-    public SecurityConfig(JWTFilter jwtFilter, CustomUserDetailsService customUserDetailsService, JWTAuthEntryPoint unauthorizedHandler) {
+    public SecurityConfig(JWTFilter jwtFilter, CustomUserDetailsService customUserDetailsService, JWTAuthEntryPoint unauthorizedHandler, CustomAccessDeniedHandler accessDeniedHandler) {
         this.jwtFilter = jwtFilter;
         this.customUserDetailsService = customUserDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
+		this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -63,6 +65,7 @@ public class SecurityConfig  {
 				// quando qualcosa fallisce ho il mio handler che customizza la response
 				.exceptionHandling(configurer -> configurer
 						.authenticationEntryPoint(unauthorizedHandler)
+						.accessDeniedHandler(accessDeniedHandler)
 				)
 
 				// Adding the JWT filter

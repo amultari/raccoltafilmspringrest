@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -23,22 +22,25 @@ public class JWTAuthEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
+			AuthenticationException authException) throws IOException {
 
 		logger.error("Unauthorized error: {}", authException.getMessage());
 
-		// se il token risulta scaduto voglio notificarlo al chiamante
-		final String expired = (String) request.getAttribute("expired");
-		if (expired != null) {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, expired);
-		}
-
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
 		final Map<String, Object> body = new HashMap<>();
 		body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
 		body.put("error", "Unauthorized");
-		body.put("message", authException.getMessage());
+
+		// se il token risulta scaduto voglio notificarlo nel body
+		final String expired = (String) request.getAttribute("expired");
+		if (expired != null) {
+			body.put("message", expired);
+		} else {
+			body.put("message", authException.getMessage());
+		}
+
 		body.put("path", request.getServletPath());
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(response.getOutputStream(), body);
